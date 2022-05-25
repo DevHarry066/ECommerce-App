@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ECommerce_App.Data;
+using ECommerce_App.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +14,38 @@ namespace ECommerce_App.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpGet]
-        public string GetProducts()
+        private readonly StoreContext _context;
+        public ProductsController(StoreContext context)
         {
-            return "All products list";
+            _context = context;
+        }
+        [HttpGet]
+        public async Task<ActionResult<List<Product>>> GetProducts()
+        {
+            List<Product> products = await _context.Products.ToListAsync();
+            if(products != null)
+            {
+            return Ok(products);
+            }
+
+            else
+            {
+                return NoContent();
+            }
         }
 
         [HttpGet("{id}")]
-        public string GetProductById(int id)
+        public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            return "a single product by id";
+            Product product = await _context.Products.FindAsync(id);
+            if(product !=null)
+            {
+                return product;
+            }
+            else
+            {
+                return NoContent();
+            }
         }
     }
 }
