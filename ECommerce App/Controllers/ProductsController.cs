@@ -47,5 +47,14 @@ namespace ECommerce_App.Controllers
                 return NoContent();
             }
         }
+
+        [HttpPost]
+
+        public async Task<ActionResult<Product>> PostProduct(Product product)
+        {
+           await _context.Products.AddAsync(product);
+           await _context.SaveChangesAsync();
+           return new JsonResult("Added Successfully");
+        }
     }
 }
