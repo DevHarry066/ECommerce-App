@@ -73,5 +73,15 @@ namespace ECommerce_App.Controllers
                 return new JsonResult("Id not found");
             }
         }
+
+        [HttpDelete]
+        public ActionResult<Product> DeleteProduct(int id)
+        {
+            var c = _context.Products.Find(id);
+            if (c == null) return NotFound("Id not found in database");
+            _context.Products.Remove(c);
+            _context.SaveChanges();
+            return new JsonResult("Deleted Successfully");
+        }
     }
 }
