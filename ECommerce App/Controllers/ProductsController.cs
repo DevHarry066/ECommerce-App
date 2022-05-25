@@ -1,5 +1,5 @@
-﻿using ECommerce_App.Data;
-using ECommerce_App.Entities;
+﻿using Core.Data;
+using Core.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ECommerce_App.Controllers
+namespace Core.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

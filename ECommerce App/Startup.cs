@@ -1,4 +1,4 @@
-using ECommerce_App.Data;
+using Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ECommerce_App
+namespace Core
 {
     public class Startup
     {
@@ -30,6 +30,7 @@ namespace ECommerce_App
         {
 
             services.AddControllers();
+            //services.AddDbContext<StoreContext>(opts =>opts.UseSqlServer(Configuration.GetConnectionString("ECommerceAppConnection"), b => b.MigrationsAssembly("Core.Api")));
 
             services.AddDbContext<StoreContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("ECommerceAppConnection")));
             services.AddSwaggerGen(c =>

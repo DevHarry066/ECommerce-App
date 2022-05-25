@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Core.Migrations
+namespace Infrastructure.Migrations
 {
-    public partial class IntialCreate : Migration
+    public partial class AfterPull : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -1,6 +1,6 @@
 using System;
 
-namespace ECommerce_App
+namespace Core
 {
     public class WeatherForecast
     {
