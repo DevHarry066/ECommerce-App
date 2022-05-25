@@ -56,5 +56,22 @@ namespace ECommerce_App.Controllers
            await _context.SaveChangesAsync();
            return new JsonResult("Added Successfully");
         }
+
+        [HttpPut]
+        public async Task<ActionResult<Product>> UpdateProduct(Product product)
+        {
+            var p = await _context.Products.FindAsync(product.Id);
+            if (p != null)
+            {
+                p.Id = product.Id;
+                p.Name = product.Name;
+                await _context.SaveChangesAsync();
+                return new JsonResult("Updated successfully");
+            }
+            else
+            {
+                return new JsonResult("Id not found");
+            }
+        }
     }
 }
