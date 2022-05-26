@@ -35,7 +35,7 @@ namespace Core
             services.AddControllers();
             //services.AddDbContext<StoreContext>(opts =>opts.UseSqlServer(Configuration.GetConnectionString("ECommerceAppConnection"), b => b.MigrationsAssembly("Core.Api")));
 
-            services.AddDbContext<StoreContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("ECommerceAppConnection")));
+            services.AddDbContext<StoreContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("ECommerceApplicationConnection")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ECommerce_App", Version = "v1" });
