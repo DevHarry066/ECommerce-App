@@ -1,5 +1,6 @@
 ﻿using Core.Data;
 using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +15,15 @@ namespace Core.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly StoreContext _context;
-        public ProductsController(StoreContext context)
+        private readonly IProductRepository _repo;
+        public ProductsController(IProductRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            List<Product> products = await _context.Products.ToListAsync();
+            List<Product> products = (List<Product>)await _repo.GetProductsAsync();
             if(products != null)
             {
             return Ok(products);
@@ -37,7 +38,7 @@ namespace Core.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            Product product = await _context.Products.FindAsync(id);
+            Product product = await _repo.GetProductByIdAsync(id);
             if(product !=null)
             {
                 return product;
@@ -52,20 +53,23 @@ namespace Core.Controllers
 
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-           await _context.Products.AddAsync(product);
-           await _context.SaveChangesAsync();
-           return new JsonResult("Added Successfully");
+           var result = await _repo.PostProduct(product);
+            if(result == "Added Successfully")
+            {
+                return new JsonResult(result);
+            }
+            else
+            {
+                return new JsonResult("Error");
+            }
         }
 
         [HttpPut]
         public async Task<ActionResult<Product>> UpdateProduct(Product product)
         {
-            var p = await _context.Products.FindAsync(product.Id);
-            if (p != null)
+            var p = await _repo.UpdateProduct(product);
+            if (p == "Updated Successfully")
             {
-                p.Id = product.Id;
-                p.Name = product.Name;
-                await _context.SaveChangesAsync();
                 return new JsonResult("Updated successfully");
             }
             else
@@ -77,11 +81,12 @@ namespace Core.Controllers
         [HttpDelete]
         public ActionResult<Product> DeleteProduct(int id)
         {
-            var c = _context.Products.Find(id);
-            if (c == null) return NotFound("Id not found in database");
-            _context.Products.Remove(c);
-            _context.SaveChanges();
+            var c = _repo.DeleteProduct(id);
+            if (!c) return NotFound("Id not found in database");
+            else
+            {
             return new JsonResult("Deleted Successfully");
+            }
         }
     }
 }

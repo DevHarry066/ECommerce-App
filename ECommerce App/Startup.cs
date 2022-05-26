@@ -1,4 +1,6 @@
 using Core.Data;
+using Core.Interfaces;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +31,7 @@ namespace Core
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddControllers();
             //services.AddDbContext<StoreContext>(opts =>opts.UseSqlServer(Configuration.GetConnectionString("ECommerceAppConnection"), b => b.MigrationsAssembly("Core.Api")));
 
