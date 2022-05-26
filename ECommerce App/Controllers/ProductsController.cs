@@ -50,11 +50,43 @@ namespace Core.Controllers
         }
 
         [HttpPost]
-
+        [Route("PostProduct")]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
            var result = await _repo.PostProduct(product);
             if(result == "Added Successfully")
+            {
+                return new JsonResult(result);
+            }
+            else
+            {
+                return new JsonResult("Error");
+            }
+        }
+
+
+        [HttpPost]
+
+        [Route("productBrand")]
+        public async Task<ActionResult<Product>> PostProductBrand(ProductBrand productBrand)
+        {
+            var result = await _repo.PostProductBrand(productBrand);
+            if (result == "Added Successfully")
+            {
+                return new JsonResult(result);
+            }
+            else
+            {
+                return new JsonResult("Error");
+            }
+        }
+
+        [HttpPost]
+        [Route("productType")]
+        public async Task<ActionResult<Product>> PostProductType(ProductType productType)
+        {
+            var result = await _repo.PostProductType(productType);
+            if (result == "Added Successfully")
             {
                 return new JsonResult(result);
             }

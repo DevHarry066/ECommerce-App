@@ -33,6 +33,21 @@ namespace Infrastructure.Data
             return "Added Successfully";
         }
 
+        public async Task<string> PostProductBrand(ProductBrand productBrand)
+        {
+            await _context.ProductBrands.AddAsync(productBrand);
+            await _context.SaveChangesAsync();
+            return "Added Successfully";
+        }
+
+        public async Task<string> PostProductType(ProductType productType)
+        {
+            await _context.ProductTypes.AddAsync(productType);
+            await _context.SaveChangesAsync();
+            return "Added Successfully";
+        }
+
+
         public async Task<string> UpdateProduct(Product product)
         {
             Product p = await _context.Products.FindAsync(product.Id);

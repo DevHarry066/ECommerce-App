@@ -15,6 +15,11 @@ namespace Core.Interfaces
 
         Task<string> PostProduct(Product product);
 
+        Task<string> PostProductBrand(ProductBrand productBrand);
+
+        Task<string> PostProductType(ProductType productType);
+
+
         Task<string> UpdateProduct(Product product);
 
         Boolean DeleteProduct(int id);
