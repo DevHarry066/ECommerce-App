@@ -23,5 +23,15 @@ namespace Core.Interfaces
         Task<string> UpdateProduct(Product product);
 
         Boolean DeleteProduct(int id);
+
+        Task<IReadOnlyList<ProductType>> GetProductTypesAsync();
+
+        Task<ProductType> GetProductTypeByIdAsync(int id);
+
+
+        Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync();
+
+        Task<ProductBrand> GetProductBrandByIdAsync(int id);
+
     }
 }

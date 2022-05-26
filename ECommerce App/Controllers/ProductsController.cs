@@ -20,7 +20,10 @@ namespace Core.Controllers
         {
             _repo = repo;
         }
+
+
         [HttpGet]
+        [Route("GetProducts")]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
             List<Product> products = (List<Product>)await _repo.GetProductsAsync();
@@ -35,13 +38,81 @@ namespace Core.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+
+        [HttpGet]
+        [Route("GetProductById/{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {
             Product product = await _repo.GetProductByIdAsync(id);
             if(product !=null)
             {
                 return product;
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetProductBrands")]
+        public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
+        {
+            List<ProductBrand> productsBrand = (List<ProductBrand>)await _repo.GetProductBrandsAsync();
+            if (productsBrand != null)
+            {
+                return Ok(productsBrand);
+            }
+
+            else
+            {
+                return NoContent();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetProductBrandById/{id}")]
+        public async Task<ActionResult<ProductBrand>> GetProductBrandById(int id)
+        {
+            ProductBrand productBrand = await _repo.GetProductBrandByIdAsync(id);
+            if (productBrand != null)
+            {
+                return productBrand;
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetProductTypes")]
+        public async Task<ActionResult<List<ProductType>>> GetProductTypes()
+        {
+            List<ProductType> productTypes = (List<ProductType>)await _repo.GetProductTypesAsync();
+            if (productTypes != null)
+            {
+                return Ok(productTypes);
+            }
+
+            else
+            {
+                return NoContent();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetProductTypeById/{id}")]
+        public async Task<ActionResult<ProductType>> GetProductTypeById(int id)
+        {
+            ProductType productType = await _repo.GetProductTypeByIdAsync(id);
+            if (productType != null)
+            {
+                return productType;
             }
             else
             {
@@ -68,7 +139,7 @@ namespace Core.Controllers
         [HttpPost]
 
         [Route("productBrand")]
-        public async Task<ActionResult<Product>> PostProductBrand(ProductBrand productBrand)
+        public async Task<ActionResult<ProductBrand>> PostProductBrand(ProductBrand productBrand)
         {
             var result = await _repo.PostProductBrand(productBrand);
             if (result == "Added Successfully")
@@ -83,7 +154,7 @@ namespace Core.Controllers
 
         [HttpPost]
         [Route("productType")]
-        public async Task<ActionResult<Product>> PostProductType(ProductType productType)
+        public async Task<ActionResult<ProductType>> PostProductType(ProductType productType)
         {
             var result = await _repo.PostProductType(productType);
             if (result == "Added Successfully")
