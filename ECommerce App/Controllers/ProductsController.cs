@@ -1,6 +1,7 @@
 ﻿using Core.Data;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specification;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,8 @@ namespace Core.Controllers
         [Route("GetProducts")]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            List<Product> products = (List<Product>)await _productRepo.ListAllAsync();
+            var spec = new ProductWithTypesAndBrandsSpecification();
+            List<Product> products = (List<Product>) await _productRepo.ListAsync(spec);
             if(products != null)
             {
             return Ok(products);
@@ -53,7 +55,8 @@ namespace Core.Controllers
         [Route("GetProductById/{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            Product product = await _productRepo.GetByIdAsync(id);
+            var spec = new ProductWithTypesAndBrandsSpecification(id);
+             Product product = await _productRepo.GetEntityWithAsync(spec);
             if(product !=null)
             {
                 return product;
