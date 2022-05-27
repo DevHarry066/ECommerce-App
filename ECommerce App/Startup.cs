@@ -1,5 +1,6 @@
 using Core.Data;
 using Core.Interfaces;
+using ECommerce_App.Helpers;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,7 @@ namespace Core
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
             //services.AddDbContext<StoreContext>(opts =>opts.UseSqlServer(Configuration.GetConnectionString("ECommerceAppConnection"), b => b.MigrationsAssembly("Core.Api")));
 

@@ -1,4 +1,5 @@
-﻿using Core.Data;
+﻿using AutoMapper;
+using Core.Data;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specification;
@@ -21,37 +22,31 @@ namespace Core.Controllers
         private readonly IGenericRepository<Product> _productRepo;
         private readonly IGenericRepository<ProductBrand> _productBrandRepo;
         private readonly IGenericRepository<ProductType> _productTypeRepo;
+        private readonly IMapper _mapper;
 
         public ProductsController(IProductRepository repo,
             IGenericRepository<Product> productRepo,
             IGenericRepository<ProductBrand> productBrandRepo,
-            IGenericRepository<ProductType> productTypeRepo)
+            IGenericRepository<ProductType> productTypeRepo,
+            IMapper mapper)
         {
             _repo = repo;
             _productRepo = productRepo;
             _productBrandRepo = productBrandRepo;
             _productTypeRepo = productTypeRepo;
+            _mapper = mapper;
         }
 
 
         [HttpGet]
         [Route("GetProducts")]
-        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
         {
             var spec = new ProductWithTypesAndBrandsSpecification();
             var products = await _productRepo.ListAsync(spec);
             if(products != null)
             {
-                return products.Select(product => new ProductToReturnDto
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    PictureUrl = product.PictureUrl,
-                    Price = product.Price,
-                    ProductType = product.ProductType.Name,
-                    ProductBrand= product.ProductBrand.Name
-               }).ToList();
+                return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
             }
             else
             {
@@ -68,16 +63,7 @@ namespace Core.Controllers
              Product product = await _productRepo.GetEntityWithAsync(spec);
             if(product !=null)
             {
-                return new ProductToReturnDto
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    PictureUrl = product.PictureUrl,
-                    Price = product.Price,
-                    ProductType = product.ProductType.Name,
-                    ProductBrand = product.ProductBrand.Name
-                };
+                return _mapper.Map<Product, ProductToReturnDto>(product);
             }
             else
             {
