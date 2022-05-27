@@ -16,9 +16,19 @@ namespace Core.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _repo;
-        public ProductsController(IProductRepository repo)
+        private readonly IGenericRepository<Product> _productRepo;
+        private readonly IGenericRepository<ProductBrand> _productBrandRepo;
+        private readonly IGenericRepository<ProductType> _productTypeRepo;
+
+        public ProductsController(IProductRepository repo,
+            IGenericRepository<Product> productRepo,
+            IGenericRepository<ProductBrand> productBrandRepo,
+            IGenericRepository<ProductType> productTypeRepo)
         {
             _repo = repo;
+            _productRepo = productRepo;
+            _productBrandRepo = productBrandRepo;
+            _productTypeRepo = productTypeRepo;
         }
 
 
@@ -26,7 +36,7 @@ namespace Core.Controllers
         [Route("GetProducts")]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            List<Product> products = (List<Product>)await _repo.GetProductsAsync();
+            List<Product> products = (List<Product>)await _productRepo.ListAllAsync();
             if(products != null)
             {
             return Ok(products);
@@ -43,7 +53,7 @@ namespace Core.Controllers
         [Route("GetProductById/{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            Product product = await _repo.GetProductByIdAsync(id);
+            Product product = await _productRepo.GetByIdAsync(id);
             if(product !=null)
             {
                 return product;
@@ -59,7 +69,7 @@ namespace Core.Controllers
         [Route("GetProductBrands")]
         public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
         {
-            List<ProductBrand> productsBrand = (List<ProductBrand>)await _repo.GetProductBrandsAsync();
+            List<ProductBrand> productsBrand = (List<ProductBrand>) await _productBrandRepo.ListAllAsync();
             if (productsBrand != null)
             {
                 return Ok(productsBrand);
@@ -76,7 +86,7 @@ namespace Core.Controllers
         [Route("GetProductBrandById/{id}")]
         public async Task<ActionResult<ProductBrand>> GetProductBrandById(int id)
         {
-            ProductBrand productBrand = await _repo.GetProductBrandByIdAsync(id);
+            ProductBrand productBrand = await _productBrandRepo.GetByIdAsync(id);
             if (productBrand != null)
             {
                 return productBrand;
@@ -92,7 +102,7 @@ namespace Core.Controllers
         [Route("GetProductTypes")]
         public async Task<ActionResult<List<ProductType>>> GetProductTypes()
         {
-            List<ProductType> productTypes = (List<ProductType>)await _repo.GetProductTypesAsync();
+            List<ProductType> productTypes = (List<ProductType>) await _productTypeRepo.ListAllAsync();
             if (productTypes != null)
             {
                 return Ok(productTypes);
@@ -109,7 +119,7 @@ namespace Core.Controllers
         [Route("GetProductTypeById/{id}")]
         public async Task<ActionResult<ProductType>> GetProductTypeById(int id)
         {
-            ProductType productType = await _repo.GetProductTypeByIdAsync(id);
+            ProductType productType = await _productTypeRepo.GetByIdAsync(id);
             if (productType != null)
             {
                 return productType;
