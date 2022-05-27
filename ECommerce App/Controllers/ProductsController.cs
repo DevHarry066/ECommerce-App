@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specification;
+using ECommerce_App.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,15 +36,23 @@ namespace Core.Controllers
 
         [HttpGet]
         [Route("GetProducts")]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts()
         {
             var spec = new ProductWithTypesAndBrandsSpecification();
-            List<Product> products = (List<Product>) await _productRepo.ListAsync(spec);
+            var products = await _productRepo.ListAsync(spec);
             if(products != null)
             {
-            return Ok(products);
+                return products.Select(product => new ProductToReturnDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    PictureUrl = product.PictureUrl,
+                    Price = product.Price,
+                    ProductType = product.ProductType.Name,
+                    ProductBrand= product.ProductBrand.Name
+               }).ToList();
             }
-
             else
             {
                 return NoContent();
@@ -53,13 +62,22 @@ namespace Core.Controllers
 
         [HttpGet]
         [Route("GetProductById/{id}")]
-        public async Task<ActionResult<Product>> GetProductById(int id)
+        public async Task<ActionResult<ProductToReturnDto>> GetProductById(int id)
         {
             var spec = new ProductWithTypesAndBrandsSpecification(id);
              Product product = await _productRepo.GetEntityWithAsync(spec);
             if(product !=null)
             {
-                return product;
+                return new ProductToReturnDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    PictureUrl = product.PictureUrl,
+                    Price = product.Price,
+                    ProductType = product.ProductType.Name,
+                    ProductBrand = product.ProductBrand.Name
+                };
             }
             else
             {
