@@ -3,6 +3,7 @@ using Core.Data;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specification;
+using ECommerce_App.Controllers;
 using ECommerce_App.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,7 @@ using System.Threading.Tasks;
 
 namespace Core.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseAPIController
     {
         private readonly IProductRepository _repo;
         private readonly IGenericRepository<Product> _productRepo;
