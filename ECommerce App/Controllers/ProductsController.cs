@@ -5,6 +5,7 @@ using Core.Interfaces;
 using Core.Specification;
 using ECommerce_App.Controllers;
 using ECommerce_App.DTOs;
+using ECommerce_App.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,8 @@ namespace Core.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [Route("GetProductById/{id}")]
         public async Task<ActionResult<ProductToReturnDto>> GetProductById(int id)
         {
@@ -66,7 +69,7 @@ namespace Core.Controllers
             }
             else
             {
-                return NoContent();
+                return NotFound(new ApiResponse(404));
             }
         }
 
