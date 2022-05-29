@@ -1,5 +1,6 @@
 using Core.Data;
 using Core.Interfaces;
+using ECommerce_App.Errors;
 using ECommerce_App.Helpers;
 using ECommerce_App.Middleware;
 using Infrastructure.Data;
@@ -43,6 +44,23 @@ namespace Core
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ECommerce_App", Version = "v1" });
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                 {
+                     var errors = actionContext.ModelState
+                     .Where(e => e.Value.Errors.Count > 0)
+                     .SelectMany(x => x.Value.Errors)
+                     .Select(x => x.ErrorMessage).ToArray();
+
+                     var errorResponse = new ApiValidationErrorResponse
+                     {
+                         Errors = errors
+                     };
+                     return new BadRequestObjectResult(errorResponse);
+                 };
             });
         }
 
