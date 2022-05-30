@@ -6,6 +6,7 @@ using Core.Specification;
 using ECommerce_App.Controllers;
 using ECommerce_App.DTOs;
 using ECommerce_App.Errors;
+using ECommerce_App.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,13 +41,16 @@ namespace Core.Controllers
 
         [HttpGet]
         [Route("GetProducts")]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productParams)
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productParams)
         {
             var spec = new ProductWithTypesAndBrandsSpecification(productParams);
+            var countSpec = new ProductWithFilterForCountSpecification(productParams);
+            var totalItem = await _productRepo.CountAsync(countSpec);
             var products = await _productRepo.ListAsync(spec);
             if(products != null)
             {
-                return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+                var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+                return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItem, data));
             }
             else
             {
