@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { IProduct } from './shared/models/product';
 import { IPagination } from './shared/models/pagination';
 
@@ -11,16 +10,9 @@ import { IPagination } from './shared/models/pagination';
 
 export class AppComponent implements OnInit {
   title = 'ECommerce Application';
-  products: IProduct[];
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.http.get('https://localhost:44305/api/products/GetProducts?pageSize=50')
-      .subscribe((response: IPagination) => {
-        this.products = response.data;
-      }, error => {
-        console.log(error);
-      });
   }
 }
