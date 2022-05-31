@@ -17,6 +17,8 @@ export class ShopComponent implements OnInit {
   products: IProduct[];
   brands: IBrand[];
   productTypes: IProductType[];
+  brandSelected = 0;
+  typeSelected = 0;
 
   ngOnInit(): void {
     this.getProducts();
@@ -25,7 +27,9 @@ export class ShopComponent implements OnInit {
   }
 
   getProducts() {
-    this.shopService.getProducts()
+    console.log(this.brandSelected);
+    console.log(this.typeSelected);
+    this.shopService.getProducts(this.brandSelected, this.typeSelected)
       .subscribe((response: IPagination) => {
         this.products = response.data;
       }, error => {
@@ -36,7 +40,7 @@ export class ShopComponent implements OnInit {
   getProductBrand() {
     this.shopService.getProductBrand()
       .subscribe((response: IBrand[]) => {
-        this.brands = response;
+        this.brands = [{ id: 0, name: 'All' }, ...response];
       }, error => {
         console.log(error);
       });
@@ -45,9 +49,19 @@ export class ShopComponent implements OnInit {
   getProductTypes() {
     this.shopService.getProductTypes()
       .subscribe((response: IProductType[]) => {
-        this.productTypes = response;
+        this.productTypes = [{ id: 0, name: 'All' }, ...response];
       }, error => {
         console.log(error);
       });
+  }
+
+  onBrandSelected(brandId: number) {
+    this.brandSelected = brandId;
+    this.getProducts();
+  }
+
+  onTypeSelected(typeId: number) {
+    this.typeSelected = typeId;
+    this.getProducts();
   }
 }
