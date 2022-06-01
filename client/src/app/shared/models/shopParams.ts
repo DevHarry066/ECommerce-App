@@ -4,4 +4,5 @@ export class ShopParams {
   sort = 'By Name';
   pageNumber = 1;
   pageSize = 6;
+  search: string;
 }
