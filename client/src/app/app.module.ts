@@ -15,7 +15,6 @@ import { HomeModule } from './home/home.module';
     BrowserModule,
     HttpClientModule,
     CoreModule,
-    ShopModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HomeModule
