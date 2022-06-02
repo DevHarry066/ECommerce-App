@@ -8,6 +8,8 @@ import { CoreModule } from './core/core.module'
 import { ShopModule } from './shop/shop.module';
 import { HomeModule } from './home/home.module';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { ToastrModule } from 'ngx-toastr';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,6 +18,10 @@ import { ErrorInterceptor } from './core/interceptors/error.interceptor';
     BrowserModule,
     HttpClientModule,
     CoreModule,
+    ToastrModule.forRoot({
+      positionClass: "toast-bottom-right",
+      preventDuplicates: true
+    }),
     BrowserAnimationsModule,
     AppRoutingModule,
     HomeModule
