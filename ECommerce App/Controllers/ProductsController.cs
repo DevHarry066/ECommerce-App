@@ -47,15 +47,9 @@ namespace Core.Controllers
             var countSpec = new ProductWithFilterForCountSpecification(productParams);
             var totalItem = await _productRepo.CountAsync(countSpec);
             var products = await _productRepo.ListAsync(spec);
-            if(products != null)
-            {
+           
                 var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
                 return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItem, data));
-            }
-            else
-            {
-                return NoContent();
-            }
         }
 
 

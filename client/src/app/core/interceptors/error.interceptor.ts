@@ -14,14 +14,22 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError(error => {
         if (error) {
           if (error.status === 400) {
-            this.toastr.error(error.error.message, error.error.statusCode);
+            if (error.error.errors) {
+              throw error.error;
+            } else {
+              this.toastr.error(error.error.message, error.error.statusCode);
+            }
           }
           if (error.status === 401) {
             this.toastr.error(error.error.message, error.error.statusCode);
           }
           if (error.status === 404) {
-            this.router.navigateByUrl('/not-found');
-            console.log("request error");
+
+            if (error.error.errors) {
+              throw error.error;
+            } else {
+              this.router.navigateByUrl('/not-found');
+            }
           }
           if (error.status === 500) {
             const navigationExtras: NavigationExtras = { state: { error: error.error } };
