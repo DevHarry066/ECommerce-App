@@ -15,6 +15,7 @@ namespace ECommerce_App.Extensions
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 
             services.Configure<ApiBehaviorOptions>(options =>
