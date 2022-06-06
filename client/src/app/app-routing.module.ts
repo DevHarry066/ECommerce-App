@@ -7,7 +7,6 @@ import { TestErrorComponent } from 'src/app/core/test-error/test-error.component
 import { NotFoundComponent } from './core/not-found/not-found.component';
 import { ServerErrorComponent } from './core/server-error/server-error.component';
 
-
 const routes: Routes = [
   {
     path: '', component: HomeComponent, data: {
