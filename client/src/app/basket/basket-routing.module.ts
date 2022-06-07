@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
-  {path:'basket', component: BasketComponent}
+  { path: '', component: BasketComponent }
 ]
 
 @NgModule({
