@@ -5,6 +5,7 @@ using ECommerce_App.Extensions;
 using ECommerce_App.Helpers;
 using ECommerce_App.Middleware;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,6 +40,8 @@ namespace Core
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
             services.AddDbContext<StoreContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("ECommerceApplicationConnection")));
+            services.AddDbContext<AppIdentityDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+            services.AddIdentityServices();
             services.AddSingleton<IConnectionMultiplexer>(c => {
                 var configuration = ConfigurationOptions.Parse(Configuration
                     .GetConnectionString("Redis"), true);
