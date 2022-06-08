@@ -41,7 +41,7 @@ namespace Core
             services.AddControllers();
             services.AddDbContext<StoreContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("ECommerceApplicationConnection")));
             services.AddDbContext<AppIdentityDbContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
-            services.AddIdentityServices();
+            services.AddIdentityServices(Configuration);
             services.AddSingleton<IConnectionMultiplexer>(c => {
                 var configuration = ConfigurationOptions.Parse(Configuration
                     .GetConnectionString("Redis"), true);
@@ -72,6 +72,8 @@ namespace Core
             app.UseCors("CorsPolicy");
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

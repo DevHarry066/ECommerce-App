@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Identity;
+using Core.Interfaces;
 using ECommerce_App.DTOs;
 using ECommerce_App.Errors;
 using Microsoft.AspNetCore.Http;
@@ -17,11 +18,15 @@ namespace ECommerce_App.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager, 
+            ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
@@ -43,7 +48,7 @@ namespace ECommerce_App.Controllers
             return new UserDto
             {
                 Email = user.Email,
-                Token = "JWT Generated token",
+                Token = _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName
             };
         }
@@ -67,7 +72,7 @@ namespace ECommerce_App.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Token = "This is jwt token",
+                Token = _tokenService.CreateToken(user),
                 Email = user.Email
             };
         }
