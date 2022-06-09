@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { IUser } from '../shared/models/user';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class AccountService {
 
   baseUrl = environment.apiUrl;
 
-  private currentUserSource = new BehaviorSubject<IUser>(null);
+  private currentUserSource = new ReplaySubject<IUser>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(
@@ -22,6 +22,10 @@ export class AccountService {
     ) { }
 
     loadCurrentUser(token: string) {
+      if(token === null) {
+        this.currentUserSource.next(null);
+        return of(null);
+      }
       let headers = new HttpHeaders();
       headers = headers.set('Authorization', `Bearer ${token}`);
       return this.http.get(this.baseUrl + 'account', {headers}).pipe(
@@ -32,10 +36,6 @@ export class AccountService {
           }
         })
       );
-    }
-
-    getCurrentUserValue() {
-      return this.currentUserSource.value;
     }
 
     login(values: any) {
@@ -67,6 +67,6 @@ export class AccountService {
     }
 
     checkEmailExists(email:string) {
-      return this.http.get(this.baseUrl +'/account/emailexists?email=' + email);
+      return this.http.get(this.baseUrl +'account/emailexists?email=' + email);
     }
 }
