@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { IUser } from '../shared/models/user';
@@ -20,6 +20,23 @@ export class AccountService {
     private http: HttpClient,
     private router: Router
     ) { }
+
+    loadCurrentUser(token: string) {
+      let headers = new HttpHeaders();
+      headers = headers.set('Authorization', `Bearer ${token}`);
+      return this.http.get(this.baseUrl + 'account', {headers}).pipe(
+        map((user: IUser) => {
+          if(user) {
+            localStorage.setItem('token', user.token);
+            this.currentUserSource.next(user);
+          }
+        })
+      );
+    }
+
+    getCurrentUserValue() {
+      return this.currentUserSource.value;
+    }
 
     login(values: any) {
       return this.http.post(this.baseUrl + 'account/login', values).pipe(
