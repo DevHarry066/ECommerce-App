@@ -11,6 +11,7 @@ import { AccountService } from '../account.service';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
+  errors: string;
 
   constructor(private fb: FormBuilder,
     private router: Router,
@@ -35,6 +36,7 @@ export class RegisterComponent implements OnInit {
       this.router.navigateByUrl('/account/login');
     }, error => {
       console.log(error);
+      this.errors = error.errors;
     });
   }
 }
